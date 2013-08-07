@@ -2,19 +2,19 @@
 %global short_name      commons-%{base_name}
 
 Name:             apache-%{short_name}
-Version:          1.5.6
-Release:          4
+Version:          1.6
+Release:          1
 Summary:          Apache Commons Pool Package
 Group:            Development/Java
 License:          ASL 2.0
 URL:              http://commons.apache.org/%{base_name}/
 Source0:          http://www.apache.org/dist/commons/%{base_name}/source/%{short_name}-%{version}-src.tar.gz
-BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:        noarch
 
 BuildRequires:    java-devel >= 0:1.6.0
 BuildRequires:    jpackage-utils
 BuildRequires:    apache-commons-parent
+BuildRequires:	  ant
 
 Requires:         java >= 0:1.6.0
 Requires:         jpackage-utils
@@ -47,14 +47,14 @@ This package contains the API documentation for %{name}.
 %setup -q -n %{short_name}-%{version}-src
 
 %build
-mvn-rpmbuild install javadoc:javadoc
+ant dist
 
 %install
 rm -rf %{buildroot}
 
 # jars
 install -d -m 0755 %{buildroot}%{_javadir}
-install -pm 644 target/%{short_name}-%{version}.jar %{buildroot}%{_javadir}/%{name}-%{version}.jar
+install -pm 644 dist/%{short_name}-%{version}-SNAPSHOT.jar %{buildroot}%{_javadir}/%{name}-%{version}.jar
 (cd %{buildroot}%{_javadir} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed  "s|apache-||g"`; done)
 (cd %{buildroot}%{_javadir} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed  "s|-%{version}||g"`; done)
 
@@ -69,7 +69,7 @@ install -pm 644 pom.xml %{buildroot}%{_mavenpomdir}/JPP-%{short_name}.pom
 
 # javadoc
 install -d -m 0755 %{buildroot}%{_javadocdir}/%{name}-%{version}
-cp -pr target/site/api*/* %{buildroot}%{_javadocdir}/%{name}-%{version}/
+cp -pr dist/docs/api*/* %{buildroot}%{_javadocdir}/%{name}-%{version}/
 ln -s %{name}-%{version} %{buildroot}%{_javadocdir}/%{name}
 
 %post
@@ -77,9 +77,6 @@ ln -s %{name}-%{version} %{buildroot}%{_javadocdir}/%{name}
 
 %postun
 %update_maven_depmap
-
-%clean
-rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
