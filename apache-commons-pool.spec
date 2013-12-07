@@ -3,7 +3,7 @@
 
 Name:             apache-%{short_name}
 Version:          1.6
-Release:          1
+Release:          2
 Summary:          Apache Commons Pool Package
 Group:            Development/Java
 License:          ASL 2.0
