@@ -7,7 +7,7 @@ Version:          1.6
 Release:          7.0%{?dist}
 Summary:          Apache Commons Pool Package
 License:          ASL 2.0
-URL:              http://commons.apache.org/%{base_name}/
+URL:              https://commons.apache.org/%{base_name}/
 Source0:          http://www.apache.org/dist/commons/%{base_name}/source/%{short_name}-%{version}-src.tar.gz
 BuildArch:        noarch
 
